@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AUROVOX Design System - Neuroinclusivo (GAIA-Compliant)
+   Foco: Clareza visual, minimalismo, segurança sensorial
+   All colors MUST be HSL.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    /* Cores Base - Calmas e Acolhedoras */
+    --background: 210 25% 98%;
+    --foreground: 220 25% 20%;
+
+    /* Cards e Superfícies */
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 20%;
+
+    /* Azul Calmo - Cor Principal (Segurança e Calma) */
+    --primary: 210 60% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Verde Suave - Ação Positiva */
+    --secondary: 145 45% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Tons Neutros */
+    --muted: 210 15% 92%;
+    --muted-foreground: 220 15% 45%;
+
+    /* Accent - Laranja Suave para Destaques */
+    --accent: 35 85% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Feedback de Erro */
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Bordas e Inputs */
+    --border: 210 20% 88%;
+    --input: 210 20% 88%;
+    --ring: 210 60% 50%;
+
+    --radius: 1rem;
+
+    /* Cores Específicas AUROVOX */
+    --card-selected: 210 70% 94%;
+    --card-hover: 210 40% 96%;
+    --phrase-area: 145 30% 96%;
+    --category-actions: 35 70% 95%;
+    --category-feelings: 340 50% 95%;
+    --category-objects: 210 50% 95%;
+    --category-places: 145 50% 95%;
+    --category-people: 280 40% 95%;
+    --category-food: 25 80% 95%;
+    --category-animals: 175 50% 95%;
+
+    /* Sidebar (Módulo Gestor) */
+    --sidebar-background: 210 25% 97%;
+    --sidebar-foreground: 220 20% 30%;
+    --sidebar-primary: 210 60% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 30% 92%;
+    --sidebar-accent-foreground: 220 20% 25%;
+    --sidebar-border: 210 20% 90%;
+    --sidebar-ring: 210 60% 50%;
+  }
+
+  .dark {
+    --background: 220 25% 12%;
+    --foreground: 210 20% 95%;
+
+    --card: 220 25% 16%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 220 25% 16%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 210 55% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 145 40% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 20% 22%;
+    --muted-foreground: 210 15% 65%;
+
+    --accent: 35 75% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 55% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 25%;
+    --input: 220 20% 25%;
+    --ring: 210 55% 55%;
+
+    --card-selected: 210 50% 25%;
+    --card-hover: 210 30% 20%;
+    --phrase-area: 145 25% 18%;
+    --category-actions: 35 50% 20%;
+    --category-feelings: 340 40% 20%;
+    --category-objects: 210 40% 20%;
+    --category-places: 145 40% 20%;
+    --category-people: 280 30% 20%;
+    --category-food: 25 60% 20%;
+    --category-animals: 175 40% 20%;
+
+    --sidebar-background: 220 25% 10%;
+    --sidebar-foreground: 210 15% 90%;
+    --sidebar-primary: 210 55% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 25% 18%;
+    --sidebar-accent-foreground: 210 15% 90%;
+    --sidebar-border: 220 20% 20%;
+    --sidebar-ring: 210 55% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Nunito', system-ui, sans-serif;
+  }
+
+  /* Foco acessível e visível */
+  *:focus-visible {
+    @apply outline-none ring-4 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer components {
+  /* Card de Comunicação - Componente Principal */
+  .comm-card {
+    @apply relative flex flex-col items-center justify-center p-4 rounded-2xl bg-card border-2 border-border cursor-pointer transition-all duration-200 select-none;
+    @apply hover:scale-105 hover:shadow-lg hover:border-primary/50;
+    @apply active:scale-95;
+    min-height: 120px;
+    min-width: 120px;
+  }
+
+  .comm-card.selected {
+    @apply border-primary bg-[hsl(var(--card-selected))] shadow-lg scale-105;
+  }
+
+  .comm-card-icon {
+    @apply w-16 h-16 mb-2 flex items-center justify-center;
+  }
+
+  .comm-card-label {
+    @apply text-base font-bold text-center leading-tight;
+  }
+
+  /* Área de Montagem de Frases */
+  .phrase-builder {
+    @apply flex items-center gap-3 p-6 rounded-3xl bg-[hsl(var(--phrase-area))] border-2 border-dashed border-secondary/40 min-h-[140px];
+  }
+
+  .phrase-card {
+    @apply flex flex-col items-center p-3 rounded-xl bg-card border-2 border-secondary shadow-md;
+    min-width: 90px;
+  }
+
+  /* Categorias com cores diferenciadas */
+  .category-actions { @apply bg-[hsl(var(--category-actions))]; }
+  .category-feelings { @apply bg-[hsl(var(--category-feelings))]; }
+  .category-objects { @apply bg-[hsl(var(--category-objects))]; }
+  .category-places { @apply bg-[hsl(var(--category-places))]; }
+  .category-people { @apply bg-[hsl(var(--category-people))]; }
+  .category-food { @apply bg-[hsl(var(--category-food))]; }
+  .category-animals { @apply bg-[hsl(var(--category-animals))]; }
+
+  /* Botão de Fala Grande e Acessível */
+  .speak-button {
+    @apply flex items-center justify-center gap-3 px-8 py-5 rounded-full bg-secondary text-secondary-foreground font-bold text-xl shadow-xl;
+    @apply hover:shadow-2xl hover:scale-105 transition-all duration-200;
+    @apply active:scale-95;
+  }
+
+  /* Navegação por Categorias */
+  .category-nav {
+    @apply flex flex-wrap gap-2 p-2;
+  }
+
+  .category-tab {
+    @apply px-5 py-3 rounded-full font-semibold text-sm transition-all duration-200;
+    @apply hover:scale-105;
+  }
+
+  .category-tab.active {
+    @apply bg-primary text-primary-foreground shadow-md;
+  }
+
+  .category-tab:not(.active) {
+    @apply bg-muted text-muted-foreground hover:bg-muted/80;
+  }
+}
+
+@layer utilities {
+  /* Animação de feedback positivo */
+  @keyframes celebrate {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1) rotate(-2deg); }
+    50% { transform: scale(1.15); }
+    75% { transform: scale(1.1) rotate(2deg); }
+  }
+
+  .animate-celebrate {
+    animation: celebrate 0.4s ease-in-out;
+  }
+
+  /* Pulse suave para indicar interatividade */
+  @keyframes soft-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.3); }
+    50% { box-shadow: 0 0 0 8px hsl(var(--primary) / 0); }
+  }
+
+  .animate-soft-pulse {
+    animation: soft-pulse 2s infinite;
+  }
+
+  /* Safe area para dispositivos móveis */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
