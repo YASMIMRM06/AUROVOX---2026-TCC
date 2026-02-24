@@ -1,73 +1,191 @@
-# Welcome to your Lovable project
+Segue o **README completo reestruturado**, organizado, técnico e pronto para você copiar e colar no seu repositório:
 
-## Project info
+---
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+# 🎓 AUROVOX – 2026
 
-## How can I edit this code?
+## Sistema Web Progressivo (PWA) – Trabalho de Conclusão de Curso
 
-There are several ways of editing your application.
+🔗 **Repositório Oficial:**
+[https://github.com/YASMIMRM06/AUROVOX---2026-TCC](https://github.com/YASMIMRM06/AUROVOX---2026-TCC)
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## 📌 Sobre o Projeto
 
-Changes made via Lovable will be committed automatically to this repo.
+O **AUROVOX** é uma aplicação web desenvolvida como Trabalho de Conclusão de Curso (TCC) – 2026.
 
-**Use your preferred IDE**
+O sistema foi projetado como uma **Progressive Web App (PWA)**, oferecendo experiência moderna, responsiva e compatível com dispositivos móveis. A arquitetura é baseada em componentes reutilizáveis, utilizando React e TypeScript para garantir organização, escalabilidade e segurança estrutural do código.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+O projeto demonstra a aplicação prática de:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+* Desenvolvimento Front-End moderno
+* Arquitetura baseada em componentes
+* Tipagem estática com TypeScript
+* Configuração de PWA
+* Testes automatizados
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🛠 Tecnologias Utilizadas
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+* **Vite** – Build tool moderna e performática
+* **React** – Biblioteca para construção de interfaces
+* **TypeScript** – Tipagem estática
+* **Tailwind CSS** – Estilização utilitária e responsiva
+* **shadcn-ui** – Biblioteca de componentes acessíveis
+* **Vitest** – Testes automatizados
+* **Node.js & npm** – Gerenciamento de dependências
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## 📂 Estrutura do Projeto
+
+### 🔹 Diretório `public/`
+
+Arquivos estáticos e configurações da PWA:
+
+```
+public/
+ ├── icons/                 # Ícones em múltiplas resoluções (PWA)
+ ├── favicon.ico            # Ícone do navegador
+ ├── manifest.json          # Configuração da Progressive Web App
+ ├── placeholder.svg
+ └── robots.txt
+```
+
+O arquivo `manifest.json` e os ícones em diferentes tamanhos permitem que o sistema seja instalado como aplicativo em dispositivos móveis e desktops.
+
+---
+
+### 🔹 Diretório `src/`
+
+Código-fonte principal da aplicação:
+
+```
+src/
+ ├── components/            # Componentes reutilizáveis
+ │    ├── ui/               # Componentes base (shadcn-ui)
+ │    ├── CardGrid.tsx
+ │    ├── CategoryTabs.tsx
+ │    ├── CommunicationCard.tsx
+ │    ├── Header.tsx
+ │    ├── InstallPWA.tsx
+ │    ├── NavLink.tsx
+ │    ├── PhraseBuilder.tsx
+ │    └── SortableCard.tsx
+ │
+ ├── data/                  # Dados estáticos
+ │    └── communicationCards.ts
+ │
+ ├── hooks/                 # Hooks customizados
+ │    ├── use-mobile.tsx
+ │    ├── use-toast.ts
+ │    └── useSpeechSynthesis.ts
+ │
+ ├── lib/                   # Funções utilitárias
+ │    └── utils.ts
+ │
+ ├── pages/                 # Páginas principais
+ │    ├── Index.tsx
+ │    ├── Install.tsx
+ │    └── NotFound.tsx
+ │
+ ├── test/                  # Testes automatizados
+ │    ├── example.test.ts
+ │    └── setup.ts
+ │
+ ├── App.tsx                # Componente raiz
+ ├── main.tsx               # Ponto de entrada
+ ├── App.css
+ ├── index.css
+ └── vite-env.d.ts
+```
+
+---
+
+## 🧠 Arquitetura do Sistema
+
+O AUROVOX adota:
+
+* Arquitetura modular baseada em componentes
+* Separação de responsabilidades (UI, lógica e dados)
+* Hooks customizados para encapsular lógica reutilizável
+* Componentização de interface com shadcn-ui
+* Estrutura compatível com Progressive Web App (PWA)
+
+---
+
+## 🚀 Como Executar o Projeto Localmente
+
+### ✅ Pré-requisitos
+
+* Node.js instalado (recomendado via nvm)
+* npm instalado
+
+---
+
+### ▶ Passo a Passo
+
+```bash
+# 1. Clonar o repositório
+git clone https://github.com/YASMIMRM06/AUROVOX---2026-TCC.git
+
+# 2. Acessar a pasta do projeto
+cd AUROVOX---2026-TCC
+
+# 3. Instalar dependências
+npm install
+
+# 4. Executar o servidor de desenvolvimento
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+A aplicação ficará disponível em:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+http://localhost:5173
+```
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🧪 Testes Automatizados
 
-## What technologies are used for this project?
+Para executar os testes:
 
-This project is built with:
+```bash
+npm run test
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+O projeto utiliza **Vitest** para validação automatizada de funcionalidades.
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## 🌐 Deploy
 
-## Can I connect a custom domain to my Lovable project?
+A aplicação pode ser publicada em plataformas compatíveis com Vite/React ou via Lovable.
 
-Yes, you can!
+Após o deploy, a aplicação poderá ser instalada como PWA em dispositivos compatíveis.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 🎓 Contexto Acadêmico
+
+Projeto desenvolvido como requisito para obtenção do título de graduação – 2026.
+
+O sistema demonstra domínio prático de:
+
+* Desenvolvimento Front-End moderno
+* Estruturação profissional de projetos
+* Versionamento com Git e GitHub
+* Arquitetura escalável baseada em componentes
+* Configuração e implementação de PWA
+
+---
+
+## 👩‍💻 Autora
+
+**Yasmim Russi Mariano**
+Trabalho de Conclusão de Curso – 2026
+
+
