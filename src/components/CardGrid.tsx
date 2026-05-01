@@ -6,6 +6,8 @@ interface CardGridProps {
   activeCategory: CategoryType;
   selectedCards: string[];
   onCardClick: (card: CommunicationCardData) => void;
+  favoriteIds?: Set<string>;
+  onToggleFavorite?: (cardId: string) => void;
 }
 
 export function CardGrid({
@@ -13,11 +15,15 @@ export function CardGrid({
   activeCategory,
   selectedCards,
   onCardClick,
+  favoriteIds,
+  onToggleFavorite,
 }: CardGridProps) {
   const filteredCards =
     activeCategory === "all"
       ? cards
-      : cards.filter((card) => card.category === activeCategory);
+      : activeCategory === "favorites"
+        ? cards.filter((card) => favoriteIds?.has(card.id))
+        : cards.filter((card) => card.category === activeCategory);
 
   return (
     <div
@@ -26,14 +32,23 @@ export function CardGrid({
       id={`panel-${activeCategory}`}
       aria-label={`Cards da categoria ${activeCategory}`}
     >
-      {filteredCards.map((card) => (
-        <CommunicationCard
-          key={card.id}
-          card={card}
-          isSelected={selectedCards.includes(card.id)}
-          onClick={() => onCardClick(card)}
-        />
-      ))}
+      {filteredCards.length === 0 && activeCategory === "favorites" ? (
+        <div className="col-span-full text-center py-12 text-muted-foreground">
+          <p className="text-lg font-semibold">Nenhum favorito ainda</p>
+          <p className="text-sm mt-1">Toque no ❤️ dos cards para favoritar</p>
+        </div>
+      ) : (
+        filteredCards.map((card) => (
+          <CommunicationCard
+            key={card.id}
+            card={card}
+            isSelected={selectedCards.includes(card.id)}
+            isFavorite={favoriteIds?.has(card.id)}
+            onClick={() => onCardClick(card)}
+            onToggleFavorite={onToggleFavorite ? () => onToggleFavorite(card.id) : undefined}
+          />
+        ))
+      )}
     </div>
   );
 }

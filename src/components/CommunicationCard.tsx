@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Heart } from "lucide-react";
 
 export interface CommunicationCardData {
   id: string;
@@ -11,9 +12,11 @@ export interface CommunicationCardData {
 interface CommunicationCardProps {
   card: CommunicationCardData;
   isSelected?: boolean;
+  isFavorite?: boolean;
   size?: "normal" | "small";
   onClick?: () => void;
   onRemove?: () => void;
+  onToggleFavorite?: () => void;
 }
 
 const categoryColors: Record<string, string> = {
@@ -39,9 +42,11 @@ const categoryBorderColors: Record<string, string> = {
 export function CommunicationCard({
   card,
   isSelected = false,
+  isFavorite = false,
   size = "normal",
   onClick,
   onRemove,
+  onToggleFavorite,
 }: CommunicationCardProps) {
   const isSmall = size === "small";
 
@@ -71,6 +76,23 @@ export function CommunicationCard({
           aria-label={`Remover ${card.label}`}
         >
           ×
+        </button>
+      )}
+      {onToggleFavorite && !isSmall && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite();
+          }}
+          className={cn(
+            "absolute top-1.5 right-1.5 w-7 h-7 rounded-full flex items-center justify-center transition-all",
+            isFavorite
+              ? "text-red-500 hover:text-red-600"
+              : "text-muted-foreground/40 hover:text-red-400"
+          )}
+          aria-label={isFavorite ? `Remover ${card.label} dos favoritos` : `Favoritar ${card.label}`}
+        >
+          <Heart className={cn("w-4 h-4", isFavorite && "fill-current")} />
         </button>
       )}
       <span

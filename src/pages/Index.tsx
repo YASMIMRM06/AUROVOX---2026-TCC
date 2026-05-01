@@ -4,19 +4,21 @@ import { PhraseBuilder } from "@/components/PhraseBuilder";
 import { CategoryTabs, CategoryType } from "@/components/CategoryTabs";
 import { CardGrid } from "@/components/CardGrid";
 import { CommunicationCardData } from "@/components/CommunicationCard";
+import { AboutSection } from "@/components/AboutSection";
 import { defaultCards } from "@/data/communicationCards";
 import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
+import { useFavorites } from "@/hooks/useFavorites";
 import { toast } from "sonner";
 
 const Index = () => {
   const [phrase, setPhrase] = useState<CommunicationCardData[]>([]);
   const [activeCategory, setActiveCategory] = useState<CategoryType>("all");
   const { speak, isSpeaking, isSupported } = useSpeechSynthesis();
+  const { favoriteIds, toggleFavorite } = useFavorites();
 
   const handleCardClick = useCallback((card: CommunicationCardData) => {
     setPhrase((prev) => [...prev, card]);
     
-    // Feedback sonoro opcional ao adicionar card
     if (isSupported) {
       speak(card.label);
     }
@@ -87,9 +89,14 @@ const Index = () => {
             activeCategory={activeCategory}
             selectedCards={phrase.map((p) => p.id)}
             onCardClick={handleCardClick}
+            favoriteIds={favoriteIds}
+            onToggleFavorite={toggleFavorite}
           />
         </section>
       </main>
+
+      {/* Sobre o AUROVOX */}
+      <AboutSection />
 
       {/* Aviso de suporte */}
       {!isSupported && (

@@ -73,53 +73,57 @@
   }
 
   .dark {
-    --background: 220 25% 12%;
-    --foreground: 210 20% 95%;
+    /* Fundo escuro suave - tom azulado acolhedor */
+    --background: 220 18% 15%;
+    --foreground: 210 15% 92%;
 
-    --card: 220 25% 16%;
-    --card-foreground: 210 20% 95%;
+    --card: 220 16% 19%;
+    --card-foreground: 210 15% 92%;
 
-    --popover: 220 25% 16%;
-    --popover-foreground: 210 20% 95%;
+    --popover: 220 16% 19%;
+    --popover-foreground: 210 15% 92%;
 
-    --primary: 210 55% 55%;
+    /* Azul suave e calmo */
+    --primary: 210 45% 58%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 145 40% 45%;
+    /* Verde pastel */
+    --secondary: 150 35% 48%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 20% 22%;
-    --muted-foreground: 210 15% 65%;
+    --muted: 220 14% 24%;
+    --muted-foreground: 210 12% 62%;
 
-    --accent: 35 75% 50%;
+    /* Laranja pastel */
+    --accent: 35 55% 52%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 55% 45%;
+    --destructive: 0 45% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 25%;
-    --input: 220 20% 25%;
-    --ring: 210 55% 55%;
+    --border: 220 14% 28%;
+    --input: 220 14% 28%;
+    --ring: 210 45% 58%;
 
-    --card-selected: 210 50% 25%;
-    --card-hover: 210 30% 20%;
-    --phrase-area: 145 25% 18%;
-    --category-actions: 35 50% 20%;
-    --category-feelings: 340 40% 20%;
-    --category-objects: 210 40% 20%;
-    --category-places: 145 40% 20%;
-    --category-people: 280 30% 20%;
-    --category-food: 25 60% 20%;
-    --category-animals: 175 40% 20%;
+    --card-selected: 210 35% 26%;
+    --card-hover: 210 22% 22%;
+    --phrase-area: 150 20% 20%;
+    --category-actions: 35 35% 22%;
+    --category-feelings: 340 30% 22%;
+    --category-objects: 210 30% 22%;
+    --category-places: 150 30% 22%;
+    --category-people: 280 22% 22%;
+    --category-food: 25 40% 22%;
+    --category-animals: 175 30% 22%;
 
-    --sidebar-background: 220 25% 10%;
-    --sidebar-foreground: 210 15% 90%;
-    --sidebar-primary: 210 55% 55%;
+    --sidebar-background: 220 18% 13%;
+    --sidebar-foreground: 210 12% 88%;
+    --sidebar-primary: 210 45% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 25% 18%;
-    --sidebar-accent-foreground: 210 15% 90%;
-    --sidebar-border: 220 20% 20%;
-    --sidebar-ring: 210 55% 55%;
+    --sidebar-accent: 220 16% 21%;
+    --sidebar-accent-foreground: 210 12% 88%;
+    --sidebar-border: 220 14% 24%;
+    --sidebar-ring: 210 45% 58%;
   }
 }
 

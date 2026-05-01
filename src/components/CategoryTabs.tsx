@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type CategoryType = "all" | "actions" | "feelings" | "objects" | "places" | "people" | "animals" | "food";
+export type CategoryType = "all" | "favorites" | "actions" | "feelings" | "objects" | "places" | "people" | "animals" | "food";
 
 interface Category {
   id: CategoryType;
@@ -10,6 +10,7 @@ interface Category {
 
 const categories: Category[] = [
   { id: "all", label: "Todos", icon: "🏠" },
+  { id: "favorites", label: "Favoritos", icon: "❤️" },
   { id: "actions", label: "Ações", icon: "🏃" },
   { id: "feelings", label: "Sentimentos", icon: "💖" },
   { id: "objects", label: "Objetos", icon: "🎒" },
