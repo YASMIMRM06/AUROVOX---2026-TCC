@@ -1,73 +1,229 @@
-# Welcome to your Lovable project
+# 🐋 AUROVOX
 
-## Project info
+> **Comunicação Aumentativa e Alternativa para todos que precisam de voz**
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+AUROVOX é um aplicativo web progressivo (PWA) desenvolvido como Trabalho de Conclusão de Curso (TCC) do IFPR — Campus Paranaguá. O sistema oferece um conjunto de ferramentas de Comunicação Aumentativa e Alternativa (CAA) para pessoas com dificuldades de fala ou comunicação verbal, como TEA (Transtorno do Espectro Autista), Apraxia da Fala, Paralisia Cerebral, Disartria e outras condições.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 📋 Índice
 
-**Use Lovable**
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Funcionalidades](#funcionalidades)
+- [Tecnologias](#tecnologias)
+- [Pré-requisitos](#pré-requisitos)
+- [Instalação e Execução](#instalação-e-execução)
+- [Configuração do Supabase](#configuração-do-supabase)
+- [Configuração de Email](#configuração-de-email)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Autora](#autora)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## Sobre o Projeto
 
-**Use your preferred IDE**
+O AUROVOX foi criado para facilitar a comunicação de pessoas que não conseguem se expressar verbalmente de forma completa ou eficaz. O app oferece cartões visuais de comunicação organizados por categorias, construção de frases, prontuário médico portátil e suporte à instalação como PWA em dispositivos móveis e desktop.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Funcionalidades
 
-Follow these steps:
+### 🗣️ Comunicação
+- **Cartões visuais** com pictogramas e texto organizados por categoria
+- **Construtor de frases** para montar sentenças completas
+- **Síntese de voz** para leitura em voz alta das frases montadas
+- **Ordenação personalizada** dos cartões por arrastar e soltar (drag and drop)
+- **Categorias** como Sentimentos, Necessidades, Alimentos, Ações e mais
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### 👤 Perfil e Prontuário
+- Cadastro completo com dados pessoais, clínicos e de comunicação
+- Informações de emergência visíveis facilmente
+- Campos de diagnóstico, medicações, alergias, tipo sanguíneo, peso e altura
+- **Exportação do prontuário como imagem PNG** em layout de duas colunas
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### 🔐 Autenticação
+- Cadastro e login com email e senha
+- Recuperação de senha com link por email (template personalizado AUROVOX)
+- Tela de redefinição de senha com checklist de segurança
+- Logout disponível em todas as telas
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 📱 PWA
+- Instalável em Android, iOS, Windows e macOS
+- Funciona offline após instalação
+- Ícone e tela de splash personalizados
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+---
+
+## Tecnologias
+
+| Camada | Tecnologia |
+|--------|-----------|
+| Frontend | React 18 + TypeScript |
+| Build | Vite |
+| Estilização | Tailwind CSS + shadcn/ui |
+| Roteamento | React Router DOM v6 |
+| Backend / Auth / DB | Supabase |
+| Email transacional | Supabase Auth (template customizado) |
+| PWA | vite-plugin-pwa |
+| Drag and Drop | dnd-kit |
+| Formulários | React Hook Form + Zod |
+| Ícones | Lucide React |
+| Notificações | Sonner |
+
+---
+
+## Pré-requisitos
+
+- [Node.js](https://nodejs.org/) v18 ou superior
+- [npm](https://www.npmjs.com/) v9 ou superior
+- Conta no [Supabase](https://supabase.com/) (gratuita)
+- Supabase CLI: `npm install -g supabase`
+
+---
+
+## Instalação e Execução
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-usuario/aurovox.git
+cd aurovox
+```
+
+### 2. Instale as dependências
+
+```bash
+npm install
+```
+
+### 3. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```dotenv
+VITE_SUPABASE_URL="https://SEU_PROJECT_ID.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY="sua_anon_key_aqui"
+VITE_SUPABASE_PROJECT_ID="seu_project_id_aqui"
+```
+
+### 4. Execute o projeto
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Acesse em: `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 5. Build para produção
 
-**Use GitHub Codespaces**
+```bash
+npm run build
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## Configuração do Supabase
 
-This project is built with:
+### Linkar o projeto
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+npx supabase login
+npx supabase link --project-ref SEU_PROJECT_ID
+```
 
-## How can I deploy this project?
+### Aplicar as migrations do banco de dados
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```bash
+npx supabase db push
+```
 
-## Can I connect a custom domain to my Lovable project?
+Isso criará as tabelas necessárias, incluindo `profiles` com todos os campos do prontuário.
 
-Yes, you can!
+### Tabela `profiles` — campos principais
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `id` | uuid | Referência ao usuário autenticado |
+| `name` | text | Nome completo |
+| `email` | text | Email |
+| `has_tea` | boolean | Possui TEA |
+| `tea_level` | text | Nível do TEA (1, 2 ou 3) |
+| `diagnosis` | text | Diagnóstico / condição |
+| `blood_type` | text | Tipo sanguíneo |
+| `weight` | text | Peso (kg) |
+| `height` | text | Altura (cm) |
+| `allergies` | text | Alergias |
+| `medications` | text | Medicações em uso |
+| `emergency_contact` | text | Nome do contato de emergência |
+| `emergency_phone` | text | Telefone de emergência |
+| `preferred_communication` | text | Método de comunicação preferido |
+| `sensory_sensitivities` | text | Sensibilidades sensoriais |
+| `routine_notes` | text | Observações de rotina |
+| `share_enabled` | boolean | Permite exportar o perfil |
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+## Configuração de Email
+
+O AUROVOX usa o serviço de email nativo do Supabase com template customizado. Para configurar:
+
+1. Acesse o painel do Supabase → **Authentication → Email Templates**
+2. Selecione **Reset Password**
+3. Altere o assunto para: `Redefinição de senha — AUROVOX`
+4. Substitua o corpo pelo template personalizado com a identidade visual do AUROVOX
+
+> O serviço gratuito do Supabase suporta até **3 emails por hora**, suficiente para desenvolvimento e apresentação do TCC.
+
+---
+
+## Estrutura do Projeto
+
+```
+aurovox/
+├── public/
+│   ├── favicon.png
+│   └── manifest.json
+├── src/
+│   ├── components/
+│   │   ├── ui/                  # Componentes shadcn/ui
+│   │   ├── Header.tsx           # Cabeçalho com nav e logout
+│   │   ├── CardGrid.tsx         # Grade de cartões de comunicação
+│   │   ├── CommunicationCard.tsx
+│   │   ├── CategoryTabs.tsx
+│   │   ├── PhraseBuilder.tsx    # Construtor de frases com voz
+│   │   └── InstallPWA.tsx
+│   ├── hooks/
+│   │   └── useAuth.tsx          # Contexto de autenticação
+│   ├── integrations/
+│   │   └── supabase/
+│   │       ├── client.ts
+│   │       └── types.ts
+│   ├── pages/
+│   │   ├── Index.tsx            # Tela principal com os cartões
+│   │   ├── Auth.tsx             # Login, cadastro e esqueci a senha
+│   │   ├── Profile.tsx          # Perfil e prontuário médico
+│   │   ├── ResetPassword.tsx    # Redefinição de senha
+│   │   └── Install.tsx          # Guia de instalação do PWA
+│   └── App.tsx
+├── supabase/
+│   ├── functions/
+│   │   └── send-reset-email/    # Edge Function (opcional)
+│   └── migrations/              # Migrations do banco de dados
+├── .env
+├── package.json
+└── vite.config.ts
+```
+
+---
+
+## Autora
+
+**Yasmim Russi**
+Estudante do IFPR — Instituto Federal do Paraná, Campus Paranaguá
+Curso Técnico em Informática
+
+> Projeto desenvolvido como Trabalho de Conclusão de Curso (TCC) — 2026
+
+---
+
+*AUROVOX — Comunicação para todos que precisam de voz* 🐋

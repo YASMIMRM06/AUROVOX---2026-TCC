@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, LogOut, Save, Download, Edit, X, User, Brain, MessageCircle, Heart, MapPin, Shield, Activity } from "lucide-react";
+import { ArrowLeft, LogOut, Save, Download, Edit, X, User, Brain, MessageCircle, Shield } from "lucide-react";
 import { toast } from "sonner";
 
 interface Profile {
@@ -32,6 +32,8 @@ interface Profile {
   health_insurance: string;
   sensory_sensitivities: string;
   routine_notes: string;
+  weight: string;
+  height: string;
 }
 
 const defaultProfile: Profile = {
@@ -58,6 +60,8 @@ const defaultProfile: Profile = {
   health_insurance: "",
   sensory_sensitivities: "",
   routine_notes: "",
+  weight: "",
+  height: "",
 };
 
 export default function ProfilePage() {
@@ -105,6 +109,8 @@ export default function ProfilePage() {
       health_insurance: (data as any).health_insurance ?? "",
       sensory_sensitivities: (data as any).sensory_sensitivities ?? "",
       routine_notes: (data as any).routine_notes ?? "",
+      weight: (data as any).weight ?? "",
+      height: (data as any).height ?? "",
     };
     setProfile(profileData);
     setForm(profileData);
@@ -137,6 +143,8 @@ export default function ProfilePage() {
         health_insurance: form.health_insurance.trim(),
         sensory_sensitivities: form.sensory_sensitivities.trim(),
         routine_notes: form.routine_notes.trim(),
+        weight: form.weight.trim(),
+        height: form.height.trim(),
       } as any)
       .eq("id", user!.id);
 
@@ -151,6 +159,9 @@ export default function ProfilePage() {
     setSaving(false);
   };
 
+  // ----------------------------------------------------------
+  // EXPORTAÇÃO EM DUAS COLUNAS
+  // ----------------------------------------------------------
   const handleExportAsImage = async () => {
     if (!profile) return;
     setExporting(true);
@@ -158,87 +169,112 @@ export default function ProfilePage() {
     try {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d")!;
-      const width = 900;
+      const width = 1000;
       const padding = 44;
+      const colGap = 24;
+      const colWidth = (width - padding * 2 - colGap) / 2;
 
-      // Build sections
-      const sections: { title: string; fields: { label: string; value: string }[] }[] = [];
+      // ---- Monta seções ----
+      type Field = { label: string; value: string };
+      type Section = { title: string; fields: Field[] };
 
-      // Dados pessoais
-      const pessoais: { label: string; value: string }[] = [];
+      const pessoais: Field[] = [];
       pessoais.push({ label: "Nome", value: profile.name || "—" });
       pessoais.push({ label: "Email", value: profile.email });
-      if (profile.date_of_birth) pessoais.push({ label: "Data de Nascimento", value: new Date(profile.date_of_birth + "T12:00:00").toLocaleDateString("pt-BR") });
+      if (profile.date_of_birth) pessoais.push({ label: "Nascimento", value: new Date(profile.date_of_birth + "T12:00:00").toLocaleDateString("pt-BR") });
       if (profile.gender) pessoais.push({ label: "Gênero", value: profile.gender });
       if (profile.phone) pessoais.push({ label: "Telefone", value: profile.phone });
+      if (profile.weight) pessoais.push({ label: "Peso", value: profile.weight });
+      if (profile.height) pessoais.push({ label: "Altura", value: profile.height });
       if (profile.address) pessoais.push({ label: "Endereço", value: profile.address });
       if (profile.caregiver_name) pessoais.push({ label: "Responsável / Cuidador", value: profile.caregiver_name });
-      sections.push({ title: "📋 DADOS PESSOAIS", fields: pessoais });
 
-      // Contato de emergência
-      const emergencia: { label: string; value: string }[] = [];
+      const emergencia: Field[] = [];
       if (profile.emergency_contact) emergencia.push({ label: "Nome", value: profile.emergency_contact });
       if (profile.emergency_phone) emergencia.push({ label: "Telefone", value: profile.emergency_phone });
-      if (emergencia.length > 0) sections.push({ title: "🚨 CONTATO DE EMERGÊNCIA", fields: emergencia });
 
-      // Informações clínicas
-      const clinicas: { label: string; value: string }[] = [];
+      const clinicas: Field[] = [];
       clinicas.push({ label: "TEA", value: profile.has_tea ? `Sim${profile.tea_level ? ` — ${profile.tea_level}` : ""}` : "Não" });
       if (profile.diagnosis) clinicas.push({ label: "Diagnóstico", value: profile.diagnosis });
       if (profile.blood_type) clinicas.push({ label: "Tipo Sanguíneo", value: profile.blood_type });
       if (profile.allergies) clinicas.push({ label: "Alergias", value: profile.allergies });
-      if (profile.medications) clinicas.push({ label: "Medicações em uso", value: profile.medications });
+      if (profile.medications) clinicas.push({ label: "Medicações", value: profile.medications });
       if (profile.health_insurance) clinicas.push({ label: "Plano de Saúde", value: profile.health_insurance });
       if (profile.therapist_name) clinicas.push({ label: "Terapeuta / Médico", value: profile.therapist_name });
       if (profile.institution) clinicas.push({ label: "Escola / Instituição", value: profile.institution });
-      if (profile.other_disabilities) clinicas.push({ label: "Observações clínicas", value: profile.other_disabilities });
-      sections.push({ title: "🏥 INFORMAÇÕES CLÍNICAS", fields: clinicas });
+      if (profile.other_disabilities) clinicas.push({ label: "Obs. clínicas", value: profile.other_disabilities });
 
-      // Comunicação e comportamento
-      const comunicacao: { label: string; value: string }[] = [];
+      const comunicacao: Field[] = [];
       if (profile.preferred_communication) comunicacao.push({ label: "Método de comunicação", value: profile.preferred_communication });
       if (profile.sensory_sensitivities) comunicacao.push({ label: "Sensibilidades sensoriais", value: profile.sensory_sensitivities });
       if (profile.routine_notes) comunicacao.push({ label: "Rotina / Observações", value: profile.routine_notes });
-      if (comunicacao.length > 0) sections.push({ title: "💬 COMUNICAÇÃO E COMPORTAMENTO", fields: comunicacao });
 
-      // Calculate height
+      // ---- Divide em duas colunas ----
+      // Coluna esquerda: Dados Pessoais + Emergência
+      // Coluna direita: Informações Clínicas + Comunicação
+      const leftSections: Section[] = [
+        { title: "📋 DADOS PESSOAIS", fields: pessoais },
+        ...(emergencia.length > 0 ? [{ title: "🚨 CONTATO DE EMERGÊNCIA", fields: emergencia }] : []),
+      ];
+      const rightSections: Section[] = [
+        { title: "🏥 INFORMAÇÕES CLÍNICAS", fields: clinicas },
+        ...(comunicacao.length > 0 ? [{ title: "💬 COMUNICAÇÃO", fields: comunicacao }] : []),
+      ];
+
+      // ---- Calcula altura de cada coluna ----
       const headerH = 110;
-      const sectionTitleH = 48;
-      const fieldH = 46;
-      const sectionGap = 16;
       const footerH = 50;
-      let totalH = headerH + footerH + padding * 2;
-      for (const sec of sections) {
-        totalH += sectionTitleH + sec.fields.length * fieldH + sectionGap;
-      }
+      const sectionTitleH = 44;
+      const fieldH = 44;
+      const sectionGap = 12;
+
+      const calcColH = (sections: Section[]) => {
+        let h = 0;
+        for (const sec of sections) {
+          h += sectionTitleH + sec.fields.length * fieldH + sectionGap;
+        }
+        return h;
+      };
+
+      const leftH = calcColH(leftSections);
+      const rightH = calcColH(rightSections);
+      const contentH = Math.max(leftH, rightH);
+      const totalH = headerH + contentH + footerH + padding * 2 + 20;
 
       canvas.width = width;
       canvas.height = totalH;
 
-      // Background - soft pastel cream
+      // ---- Fundo ----
       const grad = ctx.createLinearGradient(0, 0, 0, totalH);
       grad.addColorStop(0, "#f0f4f8");
       grad.addColorStop(1, "#e8ecf1");
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, totalH);
 
-      // Top accent bar - soft blue
+      // ---- Barra topo ----
       const barGrad = ctx.createLinearGradient(0, 0, width, 0);
       barGrad.addColorStop(0, "#6ba3d6");
       barGrad.addColorStop(1, "#89c4e8");
       ctx.fillStyle = barGrad;
       ctx.fillRect(0, 0, width, 6);
 
-      // Title
+      // ---- Cabeçalho ----
       ctx.fillStyle = "#3a5a7c";
       ctx.font = "bold 30px system-ui, -apple-system, sans-serif";
-      ctx.fillText("🐋 AUROVOX", padding, padding + 36);
+      ctx.fillText("AUROVOX", padding, padding + 36);
 
       ctx.fillStyle = "#6ba3d6";
       ctx.font = "15px system-ui, sans-serif";
       ctx.fillText("Prontuário de Comunicação Portátil", padding, padding + 60);
 
-      // Thin line
+      // Data de exportação no canto direito do header
+      ctx.fillStyle = "#8ea8be";
+      ctx.font = "12px system-ui, sans-serif";
+      const dateStr = `Exportado em ${new Date().toLocaleDateString("pt-BR")}`;
+      const dateW = ctx.measureText(dateStr).width;
+      ctx.fillText(dateStr, width - padding - dateW, padding + 36);
+
+      // Linha divisória
       ctx.strokeStyle = "rgba(107, 163, 214, 0.3)";
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -246,45 +282,71 @@ export default function ProfilePage() {
       ctx.lineTo(width - padding, headerH + padding - 14);
       ctx.stroke();
 
-      let y = headerH + padding;
+      // ---- Linha divisória central entre colunas ----
+      const colDivX = padding + colWidth + colGap / 2;
+      ctx.strokeStyle = "rgba(107, 163, 214, 0.2)";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(colDivX, headerH + padding);
+      ctx.lineTo(colDivX, headerH + padding + contentH);
+      ctx.stroke();
+      ctx.setLineDash([]);
 
-      for (const section of sections) {
-        // Section title - calm teal
-        ctx.fillStyle = "#4a8a9e";
-        ctx.font = "bold 14px system-ui, sans-serif";
-        ctx.fillText(section.title, padding, y + 20);
+      // ---- Função para renderizar uma coluna ----
+      const renderCol = (sections: Section[], startX: number) => {
+        let y = headerH + padding;
 
-        // Section underline
-        ctx.strokeStyle = "rgba(74, 138, 158, 0.2)";
-        ctx.beginPath();
-        ctx.moveTo(padding, y + 28);
-        ctx.lineTo(width - padding, y + 28);
-        ctx.stroke();
+        for (const section of sections) {
+          // Título da seção
+          ctx.fillStyle = "#4a8a9e";
+          ctx.font = "bold 13px system-ui, sans-serif";
+          ctx.fillText(section.title, startX, y + 18);
 
-        y += sectionTitleH;
+          ctx.strokeStyle = "rgba(74, 138, 158, 0.2)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(startX, y + 26);
+          ctx.lineTo(startX + colWidth, y + 26);
+          ctx.stroke();
 
-        for (const field of section.fields) {
-          ctx.fillStyle = "#7a9ab5";
-          ctx.font = "bold 11px system-ui, sans-serif";
-          ctx.fillText(field.label.toUpperCase(), padding + 8, y + 4);
+          y += sectionTitleH;
 
-          ctx.fillStyle = "#2c4a5e";
-          ctx.font = "15px system-ui, sans-serif";
-          const maxW = width - padding * 2 - 16;
-          const truncated = field.value.length > 90 ? field.value.substring(0, 87) + "..." : field.value;
-          ctx.fillText(truncated, padding + 8, y + 22);
-          y += fieldH;
+          for (const field of section.fields) {
+            // Label
+            ctx.fillStyle = "#7a9ab5";
+            ctx.font = "bold 10px system-ui, sans-serif";
+            ctx.fillText(field.label.toUpperCase(), startX + 6, y + 4);
+
+            // Valor (truncado para caber na coluna)
+            ctx.fillStyle = "#2c4a5e";
+            ctx.font = "14px system-ui, sans-serif";
+            const maxChars = Math.floor(colWidth / 7.5);
+            const truncated = field.value.length > maxChars
+              ? field.value.substring(0, maxChars - 3) + "..."
+              : field.value;
+            ctx.fillText(truncated, startX + 6, y + 22);
+            y += fieldH;
+          }
+
+          y += sectionGap;
         }
+      };
 
-        y += sectionGap;
-      }
+      // Renderiza as duas colunas
+      renderCol(leftSections, padding);
+      renderCol(rightSections, padding + colWidth + colGap);
 
-      // Footer
+      // ---- Rodapé ----
       ctx.fillStyle = "#8ea8be";
       ctx.font = "11px system-ui, sans-serif";
-      ctx.fillText(`Exportado em ${new Date().toLocaleDateString("pt-BR")} às ${new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })} • AUROVOX`, padding, totalH - 18);
+      ctx.fillText(
+        `AUROVOX — Comunicação para todos que precisam de voz • ${new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`,
+        padding,
+        totalH - 18
+      );
 
-      // Bottom bar
+      // Barra rodapé
       ctx.fillStyle = barGrad;
       ctx.fillRect(0, totalH - 4, width, 4);
 
@@ -367,6 +429,12 @@ export default function ProfilePage() {
                     ))}
                   </div>
                 </div>
+              </div>
+
+              {/* PESO E ALTURA */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <FieldInput label="Peso (kg)" value={form.weight} onChange={(v) => updateForm("weight", v)} placeholder="Ex: 65 kg" max={10} />
+                <FieldInput label="Altura (cm)" value={form.height} onChange={(v) => updateForm("height", v)} placeholder="Ex: 170 cm" max={10} />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -466,11 +534,13 @@ export default function ProfilePage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {/* View mode - Dados Pessoais */}
+              {/* Dados Pessoais */}
               <ViewSection title="Dados Pessoais">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {profile.date_of_birth && <InfoCard label="Nascimento" value={new Date(profile.date_of_birth + "T12:00:00").toLocaleDateString("pt-BR")} />}
                   {profile.gender && <InfoCard label="Gênero" value={profile.gender} />}
+                  {profile.weight && <InfoCard label="Peso" value={profile.weight} />}
+                  {profile.height && <InfoCard label="Altura" value={profile.height} />}
                   {profile.phone && <InfoCard label="Telefone" value={profile.phone} />}
                   {profile.caregiver_name && <InfoCard label="Responsável" value={profile.caregiver_name} />}
                 </div>
@@ -515,7 +585,7 @@ export default function ProfilePage() {
             </div>
           )}
 
-          {/* Export button */}
+          {/* Botão exportar */}
           {!editing && (
             <Button onClick={handleExportAsImage} disabled={exporting} variant="outline" className="w-full rounded-xl h-12 font-bold gap-2">
               <Download className="w-5 h-5" /> {exporting ? "Gerando ficha..." : "Exportar Ficha como Imagem"}

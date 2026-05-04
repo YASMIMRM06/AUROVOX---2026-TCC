@@ -1,10 +1,16 @@
-import { User, LogIn } from "lucide-react";
-import { Link } from "react-router-dom";
+import { User, LogIn, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <header className="w-full bg-card border-b border-border px-6 py-4 safe-area-top">
@@ -20,21 +26,30 @@ export function Header() {
             </p>
           </div>
         </Link>
-        <div>
-          {user ? (
+
+        {user ? (
+          <div className="flex items-center gap-2">
             <Link to="/profile">
               <Button variant="outline" size="sm" className="rounded-xl gap-2">
                 <User className="w-4 h-4" /> Perfil
               </Button>
             </Link>
-          ) : (
-            <Link to="/auth">
-              <Button variant="outline" size="sm" className="rounded-xl gap-2">
-                <LogIn className="w-4 h-4" /> Entrar
-              </Button>
-            </Link>
-          )}
-        </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="rounded-xl gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+            >
+              <LogOut className="w-4 h-4" /> Sair
+            </Button>
+          </div>
+        ) : (
+          <Link to="/auth">
+            <Button variant="outline" size="sm" className="rounded-xl gap-2">
+              <LogIn className="w-4 h-4" /> Entrar
+            </Button>
+          </Link>
+        )}
       </div>
     </header>
   );
