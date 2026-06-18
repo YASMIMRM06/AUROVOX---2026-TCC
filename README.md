@@ -14,8 +14,8 @@ AUROVOX é um aplicativo web progressivo (PWA) desenvolvido como Trabalho de Con
 - [Pré-requisitos](#pré-requisitos)
 - [Instalação e Execução](#instalação-e-execução)
 - [Configuração do Supabase](#configuração-do-supabase)
-- [Configuração de Email](#configuração-de-email)
 - [Estrutura do Projeto](#estrutura-do-projeto)
+- [Telas](#Telas)
 - [Autora](#autora)
 
 ---
@@ -46,11 +46,6 @@ O AUROVOX foi criado para facilitar a comunicação de pessoas que não consegue
 - Recuperação de senha com link por email (template personalizado AUROVOX)
 - Tela de redefinição de senha com checklist de segurança
 - Logout disponível em todas as telas
-
-### 📱 PWA
-- Instalável em Android, iOS, Windows e macOS
-- Funciona offline após instalação
-- Ícone e tela de splash personalizados
 
 ---
 
@@ -84,14 +79,12 @@ O AUROVOX foi criado para facilitar a comunicação de pessoas que não consegue
 ## Instalação e Execução
 
 ### 1. Clone o repositório
-
 ```bash
 git clone https://github.com/seu-usuario/aurovox.git
 cd aurovox
 ```
 
 ### 2. Instale as dependências
-
 ```bash
 npm install
 ```
@@ -99,7 +92,6 @@ npm install
 ### 3. Configure as variáveis de ambiente
 
 Crie um arquivo `.env` na raiz do projeto:
-
 ```dotenv
 VITE_SUPABASE_URL="https://SEU_PROJECT_ID.supabase.co"
 VITE_SUPABASE_PUBLISHABLE_KEY="sua_anon_key_aqui"
@@ -107,15 +99,12 @@ VITE_SUPABASE_PROJECT_ID="seu_project_id_aqui"
 ```
 
 ### 4. Execute o projeto
-
 ```bash
 npm run dev
 ```
-
 Acesse em: `http://localhost:8080`
 
 ### 5. Build para produção
-
 ```bash
 npm run build
 ```
@@ -125,54 +114,38 @@ npm run build
 ## Configuração do Supabase
 
 ### Linkar o projeto
-
 ```bash
 npx supabase login
 npx supabase link --project-ref SEU_PROJECT_ID
 ```
 
 ### Aplicar as migrations do banco de dados
-
 ```bash
 npx supabase db push
 ```
-
 Isso criará as tabelas necessárias, incluindo `profiles` com todos os campos do prontuário.
 
 ### Tabela `profiles` — campos principais
+| Campo                    | Tipo | Descrição |
+|--------------------------|------|-----------|
+| `id`                     | uuid | Referência ao usuário autenticado |
+| `name`                   | text | Nome completo |
+| `email`                  | text | Email |
+| `has_tea`                | boolean | Possui TEA |
+| `tea_level`              | text | Nível do TEA (1, 2 ou 3) |
+| `diagnosis`              | text | Diagnóstico / condição |
+| `blood_type`             | text | Tipo sanguíneo |
+| `weight`                 | text | Peso (kg) |
+| `height`                 | text | Altura (cm) |
+| `allergies`              | text | Alergias |
+| `medications`            | text | Medicações em uso |
+| `emergency_contact`      | text | Nome do contato de emergência |
+| `emergency_phone`        | text | Telefone de emergência |
+| `preferred_communication`| text | Método de comunicação preferido |
+| `sensory_sensitivities`  | text | Sensibilidades sensoriais |
+| `routine_notes`          | text | Observações de rotina |
+| `share_enabled`          | boolean | Permite exportar o perfil |
 
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| `id` | uuid | Referência ao usuário autenticado |
-| `name` | text | Nome completo |
-| `email` | text | Email |
-| `has_tea` | boolean | Possui TEA |
-| `tea_level` | text | Nível do TEA (1, 2 ou 3) |
-| `diagnosis` | text | Diagnóstico / condição |
-| `blood_type` | text | Tipo sanguíneo |
-| `weight` | text | Peso (kg) |
-| `height` | text | Altura (cm) |
-| `allergies` | text | Alergias |
-| `medications` | text | Medicações em uso |
-| `emergency_contact` | text | Nome do contato de emergência |
-| `emergency_phone` | text | Telefone de emergência |
-| `preferred_communication` | text | Método de comunicação preferido |
-| `sensory_sensitivities` | text | Sensibilidades sensoriais |
-| `routine_notes` | text | Observações de rotina |
-| `share_enabled` | boolean | Permite exportar o perfil |
-
----
-
-## Configuração de Email
-
-O AUROVOX usa o serviço de email nativo do Supabase com template customizado. Para configurar:
-
-1. Acesse o painel do Supabase → **Authentication → Email Templates**
-2. Selecione **Reset Password**
-3. Altere o assunto para: `Redefinição de senha — AUROVOX`
-4. Substitua o corpo pelo template personalizado com a identidade visual do AUROVOX
-
-> O serviço gratuito do Supabase suporta até **3 emails por hora**, suficiente para desenvolvimento e apresentação do TCC.
 
 ---
 
@@ -213,14 +186,31 @@ aurovox/
 ├── package.json
 └── vite.config.ts
 ```
+---
 
+## Telas
+
+### Principal
+![alt text](\img\image.png)
+
+### Autenticação
+![alt text](\img\image-3.png)
+
+### Cadastro
+![alt text](\img\image-1.png)
+
+### Perfil
+![alt text](\img\image-2.png)
+
+### Perfil exportado
+![alt text](\img\aurovox-perfil-ana-beatriz-martins.png)
 ---
 
 ## Autora
 
 **Yasmim Russi**
 Estudante do IFPR — Instituto Federal do Paraná, Campus Paranaguá
-Curso Técnico em Informática
+Analise e desenvolvimento de sistemas
 
 > Projeto desenvolvido como Trabalho de Conclusão de Curso (TCC) — 2026
 
